@@ -1,4 +1,4 @@
-module github.com/crossplane/provider-template
+module github.com/crossplane/provider-kraftcloud
 
 go 1.20
 
@@ -10,6 +10,7 @@ require (
 	gopkg.in/alecthomas/kingpin.v2 v2.2.6
 	k8s.io/apimachinery v0.27.4
 	k8s.io/client-go v0.27.4
+	sdk.kraft.cloud v0.2.4
 	sigs.k8s.io/controller-runtime v0.15.1
 	sigs.k8s.io/controller-tools v0.12.1
 )

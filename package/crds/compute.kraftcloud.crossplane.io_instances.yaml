@@ -4,18 +4,18 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.12.1
-  name: mytypes.sample.template.crossplane.io
+  name: instances.compute.kraftcloud.crossplane.io
 spec:
-  group: sample.template.crossplane.io
+  group: compute.kraftcloud.crossplane.io
   names:
     categories:
     - crossplane
     - managed
-    - template
-    kind: MyType
-    listKind: MyTypeList
-    plural: mytypes
-    singular: mytype
+    - kraftcloud
+    kind: Instance
+    listKind: InstanceList
+    plural: instances
+    singular: instance
   scope: Cluster
   versions:
   - additionalPrinterColumns:
@@ -34,7 +34,7 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: A MyType is an example API type.
+        description: A Instance is an example API type.
         properties:
           apiVersion:
             description: 'APIVersion defines the versioned schema of this representation
@@ -49,7 +49,7 @@ spec:
           metadata:
             type: object
           spec:
-            description: A MyTypeSpec defines the desired state of a MyType.
+            description: A InstanceSpec defines the desired state of a Instance.
             properties:
               deletionPolicy:
                 default: Delete
@@ -65,12 +65,31 @@ spec:
                 - Delete
                 type: string
               forProvider:
-                description: MyTypeParameters are the configurable fields of a MyType.
+                description: InstanceParameters are the configurable fields of a Instance.
                 properties:
-                  configurableField:
+                  args:
+                    items:
+                      type: string
+                    type: array
+                  desiredState:
+                    description: InstanceState represents the desired running state
+                      of the instance
                     type: string
+                  image:
+                    type: string
+                  internalPort:
+                    type: integer
+                  memory:
+                    type: string
+                  port:
+                    type: integer
                 required:
-                - configurableField
+                - args
+                - desiredState
+                - image
+                - internalPort
+                - memory
+                - port
                 type: object
               managementPolicies:
                 default:
@@ -270,17 +289,25 @@ spec:
             - forProvider
             type: object
           status:
-            description: A MyTypeStatus represents the observed state of a MyType.
+            description: A InstanceStatus represents the observed state of a Instance.
             properties:
               atProvider:
-                description: MyTypeObservation are the observable fields of a MyType.
+                description: InstanceObservation are the observable fields of a Instance.
                 properties:
-                  configurableField:
+                  bootTime:
+                    format: int64
+                    type: integer
+                  createdAt:
                     type: string
-                  observableField:
+                  dns:
+                    type: string
+                  privateIP:
                     type: string
                 required:
-                - configurableField
+                - bootTime
+                - createdAt
+                - dns
+                - privateIP
                 type: object
               conditions:
                 description: Conditions of the resource.

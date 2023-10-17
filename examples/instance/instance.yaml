@@ -1,0 +1,16 @@
+apiVersion: compute.kraftcloud.crossplane.io/v1alpha1
+kind: Instance
+metadata:
+  name: example
+spec:
+  forProvider:
+    image: unikraft.io/jayc.unikraft.io/mynginx:latest
+    memory: "64Mi"
+    args:
+    - "-c"
+    - "/nginx/conf/nginx.conf"
+    internalPort: 80
+    port: 443
+    desiredState: stopped
+  providerConfigRef:
+    name: example

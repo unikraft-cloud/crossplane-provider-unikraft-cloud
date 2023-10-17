@@ -114,5 +114,5 @@ to grant your project access to the GitHub org scoped secrets.
   [https://github.com/crossplane/crossplane/blob/master/GOVERNANCE.md#repository-governance](https://github.com/crossplane/crossplane/blob/master/GOVERNANCE.md#repository-governance)
 - [ ] Enable Issues on your project and configure Issue templates (examples at:
   [.github/ISSUE_TEMPLATE](https://github.com/crossplane/provider-template/tree/master/.github/ISSUE_TEMPLATE))
-- [ ] Create Pull Request Templates: (example:
+- [ ] Create Pull Request templates: (example:
   [PULL_REQUEST_TEMPLATE.md](https://github.com/crossplane/provider-template/blob/master/.github/PULL_REQUEST_TEMPLATE.md))
