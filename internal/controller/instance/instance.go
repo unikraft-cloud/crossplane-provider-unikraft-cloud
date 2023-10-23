@@ -151,12 +151,14 @@ func (c *kraftcloudClient) Observe(ctx context.Context, mg resource.Managed) (ma
 
 	instance, err := c.client.Instances().Status(ctx, meta.GetExternalName(mg))
 
+	// TODO(jake-ciolek): Currently, we take all errors to mean the instance doesn't exist.
+	//                    This doesn't need to be true. API can fail and we need to handle that.
 	if err != nil {
 		return managed.ExternalObservation{
 			ResourceExists:    false,
 			ResourceUpToDate:  false,
 			ConnectionDetails: managed.ConnectionDetails{},
-		}, nil
+		}, err
 	}
 
 	cr.Status.AtProvider = v1alpha1.InstanceObservation{
@@ -185,8 +187,8 @@ func (c *kraftcloudClient) Create(ctx context.Context, mg resource.Managed) (man
 
 	services := []kraftInstance.CreateInstanceServicesRequest{{
 		Handlers:     []string{kraftInstance.DefaultHandler},
-		InternalPort: int(cr.Spec.ForProvider.InternalPort),
-		Port:         int(cr.Spec.ForProvider.Port),
+		InternalPort: cr.Spec.ForProvider.InternalPort,
+		Port:         cr.Spec.ForProvider.Port,
 	}}
 
 	// Use the kubernetes library for computing memory.
