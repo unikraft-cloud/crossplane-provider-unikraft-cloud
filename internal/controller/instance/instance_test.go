@@ -21,7 +21,7 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
-	services "sdk.kraft.cloud/services"
+	kraftcloud "sdk.kraft.cloud"
 
 	"github.com/crossplane/crossplane-runtime/pkg/reconciler/managed"
 	"github.com/crossplane/crossplane-runtime/pkg/resource"
@@ -38,7 +38,7 @@ import (
 
 func TestObserve(t *testing.T) {
 	type fields struct {
-		service services.KraftCloudServices
+		service kraftcloud.KraftCloud
 	}
 
 	type args struct {
