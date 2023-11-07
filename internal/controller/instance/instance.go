@@ -39,8 +39,8 @@ import (
 	apisv1alpha1 "github.com/crossplane/provider-kraftcloud/apis/v1alpha1"
 	"github.com/crossplane/provider-kraftcloud/internal/features"
 	kraftcloud "sdk.kraft.cloud"
-	kraftInstance "sdk.kraft.cloud/instance"
-	services "sdk.kraft.cloud/services"
+	kraftcloudinstances "sdk.kraft.cloud/instances"
+	kraftcloudservices "sdk.kraft.cloud/services"
 )
 
 const (
@@ -53,15 +53,10 @@ const (
 )
 
 var (
-	kraftCloudSDKFromCreds = func(token []byte) (services.KraftCloudServices, error) {
-		client, err := services.NewServicesClient(
+	kraftCloudSDKFromCreds = func(token []byte) (kraftcloud.KraftCloud, error) {
+		return kraftcloud.NewClient(
 			kraftcloud.WithToken(string(token)),
-		)
-		if err != nil {
-			return nil, errors.Wrap(err, errNewClient)
-		}
-
-		return client, nil
+		), nil
 	}
 )
 
@@ -98,7 +93,7 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 type connector struct {
 	kube         client.Client
 	usage        resource.Tracker
-	newServiceFn func(creds []byte) (services.KraftCloudServices, error)
+	newServiceFn func(creds []byte) (kraftcloud.KraftCloud, error)
 }
 
 // Connect typically produces an ExternalClient by:
@@ -141,7 +136,7 @@ func (c *connector) Connect(ctx context.Context, mg resource.Managed) (managed.E
 type kraftcloudClient struct {
 	// A 'client' used to connect to the external resource API. In practice this
 	// would be something like an AWS SDK client.
-	client services.KraftCloudServices
+	client kraftcloud.KraftCloud
 }
 
 func (c *kraftcloudClient) Observe(ctx context.Context, mg resource.Managed) (managed.ExternalObservation, error) {
@@ -186,10 +181,14 @@ func (c *kraftcloudClient) Create(ctx context.Context, mg resource.Managed) (man
 		return managed.ExternalCreation{}, errors.New(errNotInstance)
 	}
 
-	services := []kraftInstance.CreateInstanceServicesRequest{{
-		Handlers:     []string{kraftInstance.DefaultHandler},
-		InternalPort: cr.Spec.ForProvider.InternalPort,
-		Port:         cr.Spec.ForProvider.Port,
+	services := []kraftcloudservices.Service{{
+		// TODO(nderjung): Determine the correct handlers for the service.
+		Handlers: []kraftcloudservices.Handler{
+			kraftcloudservices.HandlerTLS,
+			kraftcloudservices.HandlerHTTP,
+		},
+		DestinationPort: cr.Spec.ForProvider.InternalPort,
+		Port:            cr.Spec.ForProvider.Port,
 	}}
 
 	// Use the kubernetes library for computing memory.
@@ -205,7 +204,7 @@ func (c *kraftcloudClient) Create(ctx context.Context, mg resource.Managed) (man
 	// We set autostart to the proper value, sourced from the desiredState field.
 	autostart := cr.Spec.ForProvider.DesiredState == v1alpha1.Running
 
-	instance, err := c.client.Instances().Create(ctx, kraftInstance.CreateInstanceRequest{
+	instance, err := c.client.Instances().Create(ctx, kraftcloudinstances.CreateInstanceRequest{
 		Image:     cr.Spec.ForProvider.Image,
 		Args:      cr.Spec.ForProvider.Args,
 		MemoryMB:  bytesToMegabytes(memBytes),
