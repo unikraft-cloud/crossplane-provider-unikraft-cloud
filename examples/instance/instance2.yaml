@@ -4,13 +4,13 @@ metadata:
   name: example2
 spec:
   forProvider:
-    image: unikraft.io/jayc.unikraft.io/mynginx:latest
+    metro: dal0
+    image: unikraft.io/nderjung.unikraft.io/http-go1.21/latest
     memory: "64Mi"
     args:
-    - "-c"
-    - "/nginx/conf/nginx.conf"
+    - "/server"
     internalPort: 80
     port: 443
-    desiredState: started
+    desiredState: running
   providerConfigRef:
     name: example

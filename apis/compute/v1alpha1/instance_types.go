@@ -35,6 +35,7 @@ const (
 
 // InstanceParameters are the configurable fields of a Instance.
 type InstanceParameters struct {
+	Metro        string        `json:"metro"`
 	Image        string        `json:"image"`
 	Memory       string        `json:"memory"`
 	Args         []string      `json:"args"`

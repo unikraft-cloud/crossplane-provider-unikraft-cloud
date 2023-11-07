@@ -144,8 +144,7 @@ func (c *kraftcloudClient) Observe(ctx context.Context, mg resource.Managed) (ma
 	if !ok {
 		return managed.ExternalObservation{}, errors.New(errNotInstance)
 	}
-
-	instance, err := c.client.Instances().Status(ctx, meta.GetExternalName(mg))
+	instance, err := c.client.Instances().WithMetro(cr.Spec.ForProvider.Metro).Status(ctx, meta.GetExternalName(mg))
 
 	// TODO(jake-ciolek): Currently, we take all errors to mean the instance doesn't exist.
 	//                    This doesn't need to be true. API can fail and we need to handle that.
@@ -154,7 +153,7 @@ func (c *kraftcloudClient) Observe(ctx context.Context, mg resource.Managed) (ma
 			ResourceExists:    false,
 			ResourceUpToDate:  false,
 			ConnectionDetails: managed.ConnectionDetails{},
-		}, err
+		}, nil
 	}
 
 	cr.Status.AtProvider = v1alpha1.InstanceObservation{
@@ -204,7 +203,7 @@ func (c *kraftcloudClient) Create(ctx context.Context, mg resource.Managed) (man
 	// We set autostart to the proper value, sourced from the desiredState field.
 	autostart := cr.Spec.ForProvider.DesiredState == v1alpha1.Running
 
-	instance, err := c.client.Instances().Create(ctx, kraftcloudinstances.CreateInstanceRequest{
+	instance, err := c.client.Instances().WithMetro(cr.Spec.ForProvider.Metro).Create(ctx, kraftcloudinstances.CreateInstanceRequest{
 		Image:     cr.Spec.ForProvider.Image,
 		Args:      cr.Spec.ForProvider.Args,
 		MemoryMB:  bytesToMegabytes(memBytes),
@@ -236,7 +235,7 @@ func (c *kraftcloudClient) Update(ctx context.Context, mg resource.Managed) (man
 
 	// The only mutable state of a KraftCloud instance is it's running state.
 	// We'll allow turning them on/off via the crossplane resource.
-	instance, err := c.client.Instances().Status(ctx, meta.GetExternalName(mg))
+	instance, err := c.client.Instances().WithMetro(cr.Spec.ForProvider.Metro).Status(ctx, meta.GetExternalName(mg))
 
 	if err != nil {
 		return managed.ExternalUpdate{}, fmt.Errorf("could not get the instance state: %w", err)
@@ -246,14 +245,14 @@ func (c *kraftcloudClient) Update(ctx context.Context, mg resource.Managed) (man
 		// TODO(jake-ciolek): There might be more states, such as draining.
 		// Figure out what to do then.
 		if instance.Status == string(v1alpha1.Running) && cr.Spec.ForProvider.DesiredState == v1alpha1.Stopped {
-			_, err := c.client.Instances().Stop(ctx, meta.GetExternalName(mg), 0)
+			_, err := c.client.Instances().WithMetro(cr.Spec.ForProvider.Metro).Stop(ctx, meta.GetExternalName(mg), 0)
 
 			if err != nil {
 				return managed.ExternalUpdate{}, fmt.Errorf("could not stop the instance: %w", err)
 			}
 		}
 		if instance.Status == string(v1alpha1.Stopped) && cr.Spec.ForProvider.DesiredState == v1alpha1.Running {
-			_, err := c.client.Instances().Start(ctx, meta.GetExternalName(mg), 0)
+			_, err := c.client.Instances().WithMetro(cr.Spec.ForProvider.Metro).Start(ctx, meta.GetExternalName(mg), 0)
 
 			if err != nil {
 				return managed.ExternalUpdate{}, fmt.Errorf("could not start the instance: %w", err)
@@ -273,7 +272,7 @@ func (c *kraftcloudClient) Delete(ctx context.Context, mg resource.Managed) erro
 		return errors.New(errNotInstance)
 	}
 
-	err := c.client.Instances().Delete(ctx, meta.GetExternalName(mg))
+	err := c.client.Instances().WithMetro(cr.Spec.ForProvider.Metro).Delete(ctx, meta.GetExternalName(mg))
 
 	if err != nil {
 		return fmt.Errorf("could not delete the instance: %w", err)
