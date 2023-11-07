@@ -81,6 +81,8 @@ spec:
                     type: integer
                   memory:
                     type: string
+                  metro:
+                    type: string
                   port:
                     type: integer
                 required:
@@ -89,6 +91,7 @@ spec:
                 - image
                 - internalPort
                 - memory
+                - metro
                 - port
                 type: object
               managementPolicies:
