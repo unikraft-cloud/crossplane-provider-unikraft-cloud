@@ -4,11 +4,11 @@ metadata:
   name: example2
 spec:
   forProvider:
-    metro: dal0
-    image: unikraft.io/nderjung.unikraft.io/http-go1.21/latest
+    metro: fra0
+    image: caddy:latest
     memory: "64Mi"
     args:
-    - "/server"
+    - ""
     internalPort: 80
     port: 443
     desiredState: running
