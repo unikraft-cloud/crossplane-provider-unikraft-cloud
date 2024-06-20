@@ -1,0 +1,19 @@
+version: 2
+
+updates:
+  - package-ecosystem: gomod
+    directory: /
+    schedule:
+      interval: weekly
+      day: sunday
+      time: '09:00'
+    commit-message:
+      prefix: gomod # Prefix messages with
+      include: scope # List all updated dependencies
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: sunday
+      time: '09:00'
+
