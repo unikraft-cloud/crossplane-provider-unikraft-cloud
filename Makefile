@@ -3,7 +3,7 @@
 PROJECT_NAME := provider-unikraft-cloud
 PROJECT_REPO := github.com/crossplane/$(PROJECT_NAME)
 
-PLATFORMS ?= linux_amd64 linux_arm64
+PLATFORMS ?= linux_amd64
 -include build/makelib/common.mk
 
 # ====================================================================================

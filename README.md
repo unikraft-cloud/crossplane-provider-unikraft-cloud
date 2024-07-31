@@ -19,14 +19,14 @@ metadata:
   name: example
 spec:
   forProvider:
-    image: unikraft.io/jayc.unikraft.io/mynginx:latest
-    memory: "64Mi"
+    metro: fra0
+    image: caddy:latest
+    memory: "256Mi"
     args:
-    - "-c"
-    - "/nginx/conf/nginx.conf"
+    - ""
     internalPort: 80
     port: 443
-    desiredState: stopped
+    desiredState: running
   providerConfigRef:
     name: example
 ```
@@ -36,11 +36,38 @@ To enable provider-unikraft-cloud in your Crossplane setup, you'll need to set u
 
 ### Here's how to do it:
 
-1. Install the provider-unikraft-cloud:
+#### 1. Install the provider-unikraft-cloud:
 
 First, ensure you've installed the provider-unikraft-cloud to your Crossplane instance.
 
-2. Prepare Your Unikraft Cloud Token:
+```yaml
+apiVersion: unikraft-cloud.crossplane.io/v1
+kind: Provider
+metadata:
+  name: provider-unikraft-cloud
+spec:
+  package: ghcr.io/unikraft-cloud/crossplane-provider-unikraft-cloud:0.3.0
+```
+
+Apply the Provider to the cluster:
+
+```sh
+kubectl apply -f <filename-of-your-provider.yaml>
+```
+
+Optional, download the CRDs from the repo if you don't have them already:
+```sh
+git clone --depth 1 https://github.com/unikraft-cloud/crossplane-provider-unikraft-cloud.git
+cd crossplane-provider-unikraft-cloud
+```
+
+Apply the resources to the cluster:
+```sh
+kubectl apply -R -f package/crds
+```
+
+
+#### 2. Prepare Your Unikraft Cloud Token:
 
 You will need a valid Unikraft Cloud token to authenticate and interact with the Unikraft Cloud API. Once you've obtained your token, you'll need to encode it in base64. On a UNIX-like system, you can do this as follows:
 
@@ -52,7 +79,7 @@ echo -n 'YOUR_UNIKRAFTCLOUD_TOKEN' | base64
 
 Remember the output; you will use it in the next step.
 
-## 3. Create the Secret:
+#### 3. Create the Secret:
 
 Using the base64 encoded token from the previous step, create a secret in the crossplane-system namespace:
 
@@ -74,7 +101,7 @@ Apply the secret to the cluster:
 kubectl apply -f <filename-of-your-secret.yaml>
 ```
 
-## 4. Create the ProviderConfig:
+#### 4. Create the ProviderConfig:
 
 Now, you need to create a ProviderConfig resource that references the previously created secret:
 
@@ -97,7 +124,7 @@ Apply the ProviderConfig to the cluster:
 kubectl apply -f <filename-of-your-providerconfig.yaml>
 ```
 
-## 5. Verify Your Setup:
+#### 5. Verify Your Setup:
 
 You can now check if the ProviderConfig and the secret were created successfully:
 
@@ -108,6 +135,35 @@ kubectl get secrets -n crossplane-system
 
 If you see your example ProviderConfig and example-provider-secret secret listed, the setup is complete!
 
-## 6. Start Using provider-unikraft-cloud:
+#### 6. Start Using provider-unikraft-cloud:
 
 With the configuration in place, you can now start creating Instance resources as defined in the earlier section, and manage your Unikraft Cloud instances using Crossplane.
+
+## Building the provider manually
+
+To build the provider manually, you can use the following commands:
+
+#### 1. Fetch the dependencies:
+```sh
+make submodules
+```
+
+#### 2. Generate the CRDs:
+```sh
+go generate ./...
+```
+
+#### 3. Build the provider:
+```sh
+docker build -f cluster/Dockerfile .
+```
+
+#### 4. Tag the provider:
+```sh
+docker tag <image-id> ghcr.io/unikraft-cloud/crossplane-provider-unikraft-cloud:VERSION
+```
+
+#### 5. Push the provider to the registry:
+```sh
+docker push ghcr.io/unikraft-cloud/crossplane-provider-unikraft-cloud:VERSION
+```

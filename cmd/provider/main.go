@@ -27,6 +27,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/tools/leaderelection/resourcelock"
 	ctrl "sigs.k8s.io/controller-runtime"
+	"sigs.k8s.io/controller-runtime/pkg/cache"
 	"sigs.k8s.io/controller-runtime/pkg/log/zap"
 
 	xpv1 "github.com/crossplane/crossplane-runtime/apis/common/v1"
@@ -58,20 +59,17 @@ func main() {
 	)
 	kingpin.MustParse(app.Parse(os.Args[1:]))
 
-	zl := zap.New(zap.UseDevMode(*debug))
+	zl := zap.New(zap.WriteTo(os.Stdout), zap.UseDevMode(*debug))
 	log := logging.NewLogrLogger(zl.WithName("provider-unikraft-cloud"))
-	if *debug {
-		// The controller-runtime runs with a no-op logger by default. It is
-		// *very* verbose even at info level, so we only provide it a real
-		// logger when we're running in debug mode.
-		ctrl.SetLogger(zl)
-	}
+	ctrl.SetLogger(zl)
 
 	cfg, err := ctrl.GetConfig()
 	kingpin.FatalIfError(err, "Cannot get API server rest config")
 
 	mgr, err := ctrl.NewManager(ratelimiter.LimitRESTConfig(cfg, *maxReconcileRate), ctrl.Options{
-		SyncPeriod: syncInterval,
+		Cache: cache.Options{
+			SyncPeriod: syncInterval,
+		},
 
 		// controller-runtime uses both ConfigMaps and Leases for leader
 		// election by default. Leases expire after 15 seconds, with a
