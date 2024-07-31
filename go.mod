@@ -1,4 +1,4 @@
-module github.com/crossplane/provider-kraftcloud
+module github.com/crossplane/provider-unikraft-cloud
 
 go 1.22
 

@@ -5,9 +5,9 @@ metadata:
   name: example-provider-secret
 type: Opaque
 data:
-  credentials: #base64 encoded kraftcloud token
+  credentials: #base64 encoded unikraft-cloud token
 ---
-apiVersion: kraftcloud.crossplane.io/v1alpha1
+apiVersion: unikraft-cloud.crossplane.io/v1alpha1
 kind: ProviderConfig
 metadata:
   name: example

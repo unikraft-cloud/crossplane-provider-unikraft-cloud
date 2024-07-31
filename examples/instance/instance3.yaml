@@ -1,4 +1,4 @@
-apiVersion: compute.kraftcloud.crossplane.io/v1alpha1
+apiVersion: compute.unikraft-cloud.crossplane.io/v1alpha1
 kind: Instance
 metadata:
   name: example3

@@ -4,9 +4,9 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.12.1
-  name: providerconfigs.kraftcloud.crossplane.io
+  name: providerconfigs.unikraft-cloud.crossplane.io
 spec:
-  group: kraftcloud.crossplane.io
+  group: unikraft-cloud.crossplane.io
   names:
     kind: ProviderConfig
     listKind: ProviderConfigList
@@ -25,7 +25,7 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: A ProviderConfig configures a KraftCloud provider.
+        description: A ProviderConfig configures a Unikraft Cloud provider.
         properties:
           apiVersion:
             description: 'APIVersion defines the versioned schema of this representation

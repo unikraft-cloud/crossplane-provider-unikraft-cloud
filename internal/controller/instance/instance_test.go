@@ -21,7 +21,7 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
-	kraftcloudinstances "sdk.kraft.cloud/instances"
+	unikraftcloudinstances "sdk.kraft.cloud/instances"
 
 	"github.com/crossplane/crossplane-runtime/pkg/reconciler/managed"
 	"github.com/crossplane/crossplane-runtime/pkg/resource"
@@ -38,7 +38,7 @@ import (
 
 func TestObserve(t *testing.T) {
 	type fields struct {
-		service kraftcloudinstances.InstancesService
+		service unikraftcloudinstances.InstancesService
 	}
 
 	type args struct {
@@ -62,7 +62,7 @@ func TestObserve(t *testing.T) {
 
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
-			e := kraftcloudClient{client: tc.fields.service}
+			e := unikraftcloudClient{client: tc.fields.service}
 			got, err := e.Observe(tc.args.ctx, tc.args.mg)
 			if diff := cmp.Diff(tc.want.err, err, test.EquateErrors()); diff != "" {
 				t.Errorf("\n%s\ne.Observe(...): -want error, +got error:\n%s\n", tc.reason, diff)

@@ -4,9 +4,9 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.12.1
-  name: storeconfigs.kraftcloud.crossplane.io
+  name: storeconfigs.unikraft-cloud.crossplane.io
 spec:
-  group: kraftcloud.crossplane.io
+  group: unikraft-cloud.crossplane.io
   names:
     categories:
     - crossplane

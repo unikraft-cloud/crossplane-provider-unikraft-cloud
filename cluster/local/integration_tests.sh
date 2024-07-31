@@ -34,7 +34,7 @@ echo_error(){
 
 
 # The name of your provider. Many provider Makefiles override this value.
-PACKAGE_NAME="provider-kraftcloud"
+PACKAGE_NAME="provider-unikraft-cloud"
 
 
 # ------------------------------
