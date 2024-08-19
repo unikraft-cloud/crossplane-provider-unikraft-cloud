@@ -16,7 +16,7 @@ limitations under the License.
 
 // Package v1alpha1 contains the core resources of the Unikraft-Cloud provider.
 // +kubebuilder:object:generate=true
-// +groupName=unikraft-cloud.crossplane.io
+// +groupName=cloud.unikraft.crossplane.io
 // +versionName=v1alpha1
 package v1alpha1
 
@@ -27,7 +27,7 @@ import (
 
 // Package type metadata.
 const (
-	Group   = "unikraft-cloud.crossplane.io"
+	Group   = "cloud.unikraft.crossplane.io"
 	Version = "v1alpha1"
 )
 

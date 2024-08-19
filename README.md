@@ -13,7 +13,7 @@ The `Instance` type allows you to specify the desired state of your Unikraft Clo
 Sample resource:
 
 ```yaml
-apiVersion: compute.unikraft-cloud.crossplane.io/v1alpha1
+apiVersion: compute.cloud.unikraft.crossplane.io/v1alpha1
 kind: Instance
 metadata:
   name: example
@@ -41,7 +41,7 @@ To enable provider-unikraft-cloud in your Crossplane setup, you'll need to set u
 First, ensure you've installed the provider-unikraft-cloud to your Crossplane instance.
 
 ```yaml
-apiVersion: unikraft-cloud.crossplane.io/v1
+apiVersion: cloud.unikraft.crossplane.io/v1
 kind: Provider
 metadata:
   name: provider-unikraft-cloud
@@ -106,7 +106,7 @@ kubectl apply -f <filename-of-your-secret.yaml>
 Now, you need to create a ProviderConfig resource that references the previously created secret:
 
 ```yaml
-apiVersion: unikraft-cloud.crossplane.io/v1alpha1
+apiVersion: cloud.unikraft.crossplane.io/v1alpha1
 kind: ProviderConfig
 metadata:
   name: example
@@ -129,7 +129,7 @@ kubectl apply -f <filename-of-your-providerconfig.yaml>
 You can now check if the ProviderConfig and the secret were created successfully:
 
 ```sh
-kubectl get providerconfigs.unikraft-cloud.crossplane.io
+kubectl get providerconfigs.cloud.unikraft.crossplane.io
 kubectl get secrets -n crossplane-system
 ```
 

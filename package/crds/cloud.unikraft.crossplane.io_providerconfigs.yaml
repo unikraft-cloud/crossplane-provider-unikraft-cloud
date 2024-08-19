@@ -4,9 +4,9 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.14.0
-  name: providerconfigs.unikraft-cloud.crossplane.io
+  name: providerconfigs.cloud.unikraft.crossplane.io
 spec:
-  group: unikraft-cloud.crossplane.io
+  group: cloud.unikraft.crossplane.io
   names:
     kind: ProviderConfig
     listKind: ProviderConfigList
