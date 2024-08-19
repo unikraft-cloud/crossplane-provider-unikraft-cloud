@@ -14,20 +14,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// Package apis contains Kubernetes API for the KraftCloud provider.
+// Package apis contains Kubernetes API for the Unikraft Cloud provider.
 package apis
 
 import (
 	"k8s.io/apimachinery/pkg/runtime"
 
-	samplev1alpha1 "github.com/crossplane/provider-kraftcloud/apis/compute/v1alpha1"
-	kraftcloudv1alpha1 "github.com/crossplane/provider-kraftcloud/apis/v1alpha1"
+	samplev1alpha1 "github.com/crossplane/provider-unikraft-cloud/apis/compute/v1alpha1"
+	unikraftcloudv1alpha1 "github.com/crossplane/provider-unikraft-cloud/apis/v1alpha1"
 )
 
 func init() {
 	// Register the types with the Scheme so the components can map objects to GroupVersionKinds and back
 	AddToSchemes = append(AddToSchemes,
-		kraftcloudv1alpha1.SchemeBuilder.AddToScheme,
+		unikraftcloudv1alpha1.SchemeBuilder.AddToScheme,
 		samplev1alpha1.SchemeBuilder.AddToScheme,
 	)
 }

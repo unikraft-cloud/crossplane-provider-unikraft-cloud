@@ -1,5 +1,5 @@
 # Build the manager binary
-FROM golang:1.16 as builder
+FROM golang:1.22 AS builder
 
 WORKDIR /workspace
 # Copy the Go Modules manifests
@@ -17,10 +17,11 @@ COPY internal/ internal/
 # Build
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 GO111MODULE=on go build -a -o provider cmd/provider/main.go
 
-FROM alpine:3.7
+FROM gcr.io/distroless/static@sha256:49af06135e8bbe8ddc46c1d28b0bd00961aae9c9ed090bbc0237f58e1462dd4b
 WORKDIR /
-COPY --from=builder /workspace/provider .
+COPY --from=builder /workspace/provider /usr/local/bin/crossplane-unikraft-cloud-provider
 COPY package /
 
+USER 65532
 EXPOSE 8080
-ENTRYPOINT ["/provider"]
+ENTRYPOINT ["crossplane-unikraft-cloud-provider"]

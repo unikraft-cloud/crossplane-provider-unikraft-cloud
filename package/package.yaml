@@ -1,0 +1,10 @@
+apiVersion: meta.pkg.crossplane.io/v1alpha1
+kind: Provider
+metadata:
+  name: provider-unikraft-cloud
+  annotations:
+    meta.crossplane.io/maintainer: Unikraft Cloud Maintainers <support@unikraft.cloud>
+    meta.crossplane.io/source: github.com/unikraft-cloud/crossplane-provider-unikraft-cloud
+    meta.crossplane.io/license: Apache-2.0
+    meta.crossplane.io/description: |
+      A unikraft-cloud provider that can be used to create Crossplane providers.

@@ -20,11 +20,11 @@ import (
 	"github.com/crossplane/crossplane-runtime/pkg/controller"
 	ctrl "sigs.k8s.io/controller-runtime"
 
-	"github.com/crossplane/provider-kraftcloud/internal/controller/config"
-	"github.com/crossplane/provider-kraftcloud/internal/controller/instance"
+	"github.com/crossplane/provider-unikraft-cloud/internal/controller/config"
+	"github.com/crossplane/provider-unikraft-cloud/internal/controller/instance"
 )
 
-// Setup creates all KraftCloud controllers with the supplied logger and adds them to
+// Setup creates all Unikraft Cloud controllers with the supplied logger and adds them to
 // the supplied manager.
 func Setup(mgr ctrl.Manager, o controller.Options) error {
 	for _, setup := range []func(ctrl.Manager, controller.Options) error{
